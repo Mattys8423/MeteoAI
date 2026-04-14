@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Img"
+    "\\AI",
+    "\\AI\\model",
+    "\\BackEnd"
   ],
+  "SelectedNode": "\\BackEnd\\.env.example",
   "PreviewInSolutionExplorer": false
 }

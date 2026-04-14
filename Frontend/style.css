@@ -160,3 +160,36 @@ button:focus .icon {
     background-color: #1a1a1a;
     color: #fff;
 }
+
+/*---------------------------Classes de l'historique---------------------------*/
+
+#weatherResult {
+    margin-bottom: 30px;
+}
+
+#historySection {
+    margin-top: 30px;
+    text-align: left;
+}
+
+    #historySection h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+#history {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 15px;
+    backdrop-filter: blur(4px);
+}
+
+    .history-item p {
+        margin: 5px 0;
+    }
