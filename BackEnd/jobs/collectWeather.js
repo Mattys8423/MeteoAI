@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const axios = require("axios");
 const WeatherRecord = require("../models/WeatherRecord");
 
-const cities = ["Paris", "Lyon", "Marseille", "Lille", "Toulouse"];
+const cities = ["Paris", "Lyon", "Marseille", "Lille", "Toulouse", "Bordeaux", "Tokyo", "Pékin", "New York", "Los Angeles", "London", "Berlin", "Moscow", "Sydney", "Rio de Janeiro", "Mexico", "Tahiti"];
 
 async function fetchAndStoreWeather(city) {
     const apiKey = process.env.OPENWEATHER_API_KEY;

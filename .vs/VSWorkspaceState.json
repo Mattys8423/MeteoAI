@@ -3,8 +3,10 @@
     "",
     "\\AI",
     "\\AI\\model",
-    "\\BackEnd"
+    "\\BackEnd",
+    "\\BackEnd\\jobs",
+    "\\Frontend"
   ],
-  "SelectedNode": "\\BackEnd\\.env.example",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }

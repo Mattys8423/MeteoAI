@@ -1,0 +1,18 @@
+démarrer MongoDB:
+1. Ouvrez une invite de commande ou un terminal en mode admin.
+2. Tapez la commande suivante pour démarrer le service MongoDB:
+   net start MongoDB
+
+démarrer le serveur Node.js:
+1. Ouvrez une invite de commande ou un terminal.
+2. Naviguez jusqu'au répertoire de votre projet Node.js en utilisant la commande cd. (ex: cd /d D:\Repository\MeteoAI\BackEnd)
+3. Démarrez le serveur Node.js en exécutant la commande suivante:
+   node server.js
+
+Gérer L'IA :
+1. Ouvrez une invite de commande ou un terminal.
+2. Naviguez jusqu'au répertoire de votre projet Node.js en utilisant la commande cd. (ex: cd /d D:\Repository\MeteoAI\AI)
+3. Démarrez l'IA en exécutant la commande suivante:
+   python train_model.py
+   python predict.py ville heure
+   (Remplacez "ville" et "heure" par les valeurs souhaitées pour obtenir la prévision météorologique.)

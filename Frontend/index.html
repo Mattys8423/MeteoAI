@@ -44,11 +44,30 @@
     </div>
 
     <!----------------------------Affichage Prévision--------------------------->
-    <div id="prediction" class="hidden">
-        <h2>Prévision</h2>
-        <p id="predictionValue"></p>
+    <!--Contrôles et affichage des prédictions météo-->
+    <div id="predictionSection" class="prediction-card hidden">
+        <h2>Prévision IA</h2>
+
+        <!--Contrôles-->
+        <div id="predictionControls" class="prediction-controls hidden">
+            <label for="predictionHours">Prévoir dans :</label>
+            <input type="number" id="predictionHours" min="1" max="24" value="1">
+            <button id="predict-button" type="button">Prédire</button>
+        </div>
+
+        <!--Affichage-->
+        <div id="prediction" class="hidden">
+            <p id="predictionValue" class="prediction-value"></p>
+        </div>
+    </div>
+
+    <!--Diagramme des prédictions sur les 6 prochaines heures-->
+    <div id="forecastChartSection" class="chart-card hidden">
+        <h2>Évolution prévue sur les 6 prochaines heures</h2>
+        <canvas id="forecastChart"></canvas>
     </div>
 
     <script src="meteo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

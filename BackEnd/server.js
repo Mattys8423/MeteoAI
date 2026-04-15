@@ -1,6 +1,4 @@
 // server.js
-//cd /d D:/Repository/TestMeteo/BackEnd --> node server.js
-
 require("dotenv").config();
 
 // Import des modules
@@ -13,6 +11,7 @@ const weatherRoutes = require("./routes/weather");
 const historyRoutes = require("./routes/history");
 const predictionRoutes = require("./routes/prediction");
 const { startWeatherCollectionJob } = require("./jobs/collectWeather");
+const { startTrainingJob } = require("./jobs/trainModel");
 
 // Création de l'application Express
 const app = express();
@@ -37,6 +36,7 @@ app.use("/api/prediction", predictionRoutes);
 
 // Démarrage de la tâche de collecte automatique
 startWeatherCollectionJob();
+startTrainingJob();
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;

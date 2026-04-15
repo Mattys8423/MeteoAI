@@ -193,3 +193,91 @@ button:focus .icon {
     .history-item p {
         margin: 5px 0;
     }
+
+/*--------------------------- Prédicitions ---------------------------*/
+.prediction-card,
+.chart-card {
+    max-width: 800px;
+    margin: 30px auto 0 auto;
+    margin-bottom: 40px;
+    padding: 24px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+    .prediction-card h2,
+    .chart-card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+.prediction-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+    .prediction-controls label {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+#predictionHours {
+    width: 90px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+}
+
+#predict-button {
+    background: #008dff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+    #predict-button:hover {
+        transform: translateY(-1px);
+        opacity: 0.92;
+    }
+
+    #predict-button:active {
+        transform: translateY(0);
+    }
+
+.prediction-value {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 10px 0 0 0;
+}
+
+#forecastChart {
+    width: 100%;
+    max-height: 340px;
+}
+
+@media (max-width: 768px) {
+    .prediction-controls {
+        flex-direction: column;
+    }
+
+    #predictionHours,
+    #predict-button {
+        width: 100%;
+        max-width: 220px;
+    }
+}
