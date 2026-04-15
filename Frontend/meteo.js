@@ -163,6 +163,14 @@ function loadPrediction() {
             predictionValue.textContent =
                 `${data.predictedTemperature.toFixed(1)} °C dans ${data.hours}h`;
 
+            // Afficher le loader du graphique
+            const loadingMessage = document.getElementById("chartLoadingMessage");
+            loadingMessage.classList.remove("hidden"); // 🔥 important
+            loadingMessage.innerHTML = `
+                <span class="loader"></span>
+                <span>Calcul IA en cours...</span>
+            `;
+
             // Charger le graphique
             loadForecastChart(city);
         })
@@ -177,32 +185,49 @@ let chartInstance = null;
 
 async function loadForecastChart(city) {
     const section = document.getElementById("forecastChartSection");
+    const loadingMessage = document.getElementById("chartLoadingMessage");
+    const chartContainer = document.getElementById("chartContainer");
 
     try {
+        // passer en mode loading
+        section.classList.remove("hidden", "chart-ready-state");
+        section.classList.add("chart-loading-state");
+
+        // loader visible automatiquement via CSS
+
         const response = await fetch(
             `http://localhost:3000/api/prediction/next6h?city=${encodeURIComponent(city)}`
         );
 
         if (!response.ok) {
-            console.error("Erreur API graphique");
-            section.classList.add("hidden");
-            return;
+            throw new Error("Erreur API graphique");
         }
 
         const predictions = await response.json();
 
-        if (!Array.isArray(predictions) || predictions.length !== 6) {
-            console.error("Données insuffisantes pour le graphique :", predictions);
-            section.classList.add("hidden");
-            return;
+        if (!Array.isArray(predictions) || predictions.length === 0) {
+            throw new Error("Pas assez de données");
         }
 
-        renderChart(predictions);
-        section.classList.remove("hidden");
+        // attendre que le DOM soit prêt
+        requestAnimationFrame(() => {
+            renderChart(predictions);
+
+            // passer en mode ready (cache loader automatiquement)
+            section.classList.remove("chart-loading-state");
+            section.classList.add("chart-ready-state");
+        });
 
     } catch (error) {
         console.error("Erreur graphique :", error);
-        section.classList.add("hidden");
+
+        // En cas d'erreur : petite carte + message centré
+        chartContainer.classList.add("hidden");
+        loadingMessage.classList.remove("hidden");
+        loadingMessage.innerHTML = `<span>Impossible de charger le graphique</span>`;
+
+        section.classList.remove("chart-ready-state");
+        section.classList.add("chart-loading-state");
     }
 }
 
@@ -231,6 +256,7 @@ function renderChart(predictions) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: false

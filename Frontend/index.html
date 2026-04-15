@@ -62,9 +62,21 @@
     </div>
 
     <!--Diagramme des prédictions sur les 6 prochaines heures-->
-    <div id="forecastChartSection" class="chart-card hidden">
-        <h2>Évolution prévue sur les 6 prochaines heures</h2>
-        <canvas id="forecastChart"></canvas>
+    <div id="forecastChartSection" class="hidden chart-wrapper chart-loading-state">
+
+        <!--Titre du graphique-->
+        <h2 id="forecastChartTitle">Évolution prévue sur les 6 prochaines heures</h2>
+
+        <!--Chargement du graphique...-->
+        <div id="chartLoadingMessage" class="hidden loading-container">
+            <span class="loader"></span>
+            <span>Calcul IA en cours...</span>
+        </div>
+
+        <!--Graphique des prédictions météo sur les 6 prochaines heures-->
+        <div class="chart-container hidden" id="chartContainer">
+            <canvas id="forecastChart"></canvas>
+        </div>
     </div>
 
     <script src="meteo.js"></script>
