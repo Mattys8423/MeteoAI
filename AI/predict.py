@@ -17,6 +17,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
 # ---------------------------
 # PARAMETRES
@@ -26,7 +27,7 @@ if len(sys.argv) < 3:
     print("Usage: python predict.py <ville> <hours>")
     sys.exit()
 
-city = sys.argv[1]
+city = sys.argv[1].strip()
 hours = int(sys.argv[2])
 
 if hours < 1 or hours > 24:
@@ -40,8 +41,21 @@ window_size = 12
 # CONNEXION MONGODB
 # ---------------------------
 
-client = MongoClient("mongodb://127.0.0.1:27017/")
-db = client["weatherdb"]
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_PATH = os.path.join(BASE_DIR, "..", "BackEnd", ".env")
+
+load_dotenv(ENV_PATH)
+mongo_uri = os.getenv("MONGO_URI")
+
+if not mongo_uri:
+    print("MONGO_URI introuvable dans le fichier .env")
+    sys.exit()
+
+client = MongoClient(mongo_uri)
+
+db = client.get_default_database()
+if db is None:
+    db = client["weatherdb"]
 
 weather_collection = db["weatherrecords"]
 prediction_collection = db["predictions"]
@@ -197,22 +211,34 @@ for step in range(hours):
     )
 
 # ---------------------------
-# RESULTAT FINAL
+# SAUVEGARDE MONGODB
 # ---------------------------
+prediction = pred
 
-prediction = float(pred)
+# sécurité
+if prediction is None or np.isnan(prediction):
+    print(f"Prediction invalide pour {hours}h -> NON INSEREE")
+    sys.exit()
 
+# normalisation
+city = city.strip()
+hours = int(hours)
+
+# suppression ancienne
 prediction_collection.delete_many({
     "city": city,
     "hours": hours
 })
 
-prediction_collection.insert_one({
+# insertion
+result = prediction_collection.insert_one({
     "city": city,
-    "predictedTemperature": prediction,
+    "predictedTemperature": float(prediction),
     "hours": hours,
     "predictedAt": datetime.utcnow(),
     "targetTime": datetime.utcnow() + timedelta(hours=hours)
 })
+
+print(f"INSERT OK -> id={result.inserted_id} | city={city} | hours={hours} | temp={prediction:.2f}")
 
 print(f"Prediction OK pour {city} dans {hours}h : {prediction:.2f} °C")

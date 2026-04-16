@@ -13,6 +13,7 @@ import joblib
 import os
 import sys
 from sklearn.ensemble import GradientBoostingRegressor
+from dotenv import load_dotenv
 
 # ---------------------------
 # PARAMETRES
@@ -29,8 +30,23 @@ window_size = 12  # historique utilisé
 # CONNEXION MONGODB
 # ---------------------------
 
-client = MongoClient("mongodb://127.0.0.1:27017/")
-db = client["weatherdb"]
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_PATH = os.path.join(BASE_DIR, "..", "BackEnd", ".env")
+
+load_dotenv(ENV_PATH)
+
+mongo_uri = os.getenv("MONGO_URI")
+
+if not mongo_uri:
+    print("MONGO_URI introuvable dans le fichier .env")
+    sys.exit()
+
+client = MongoClient(mongo_uri)
+
+db = client.get_default_database()
+if db is None:
+    db = client["weatherdb"]
+
 collection = db["weatherrecords"]
 
 # ---------------------------

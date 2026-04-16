@@ -57,7 +57,26 @@
 
         <!--Affichage-->
         <div id="prediction" class="hidden">
-            <p id="predictionValue" class="prediction-value"></p>
+            <div id="predictionLoadingMessage" class="hidden loading-container">
+                <div class="prediction-loader">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+                <span>Calcul IA en cours<span class="dots"></span></span>
+            </div>
+
+            <p id="predictionValue" class="prediction-value hidden"></p>
         </div>
     </div>
 
@@ -68,9 +87,9 @@
         <h2 id="forecastChartTitle">Évolution prévue sur les 6 prochaines heures</h2>
 
         <!--Chargement du graphique...-->
-        <div id="chartLoadingMessage" class="hidden loading-container">
-            <span class="loader"></span>
-            <span>Calcul IA en cours...</span>
+        <div id="chartLoadingMessage" class="loading-container">
+            <div class="chart-pulse-loader"></div>
+            <span>Construction du graphique<span class="dots"></span></span>
         </div>
 
         <!--Graphique des prédictions météo sur les 6 prochaines heures-->

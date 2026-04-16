@@ -37,6 +37,18 @@ function getWeather() {
     predictionBlock.classList.add("hidden");
     predictionValue.textContent = "";
 
+    // Reset graphique
+    if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+    }
+
+    chartCity = null;
+
+    const forecastSection = document.getElementById("forecastChartSection");
+    forecastSection.classList.add("hidden");
+    forecastSection.classList.remove("chart-loading-state", "chart-ready-state");
+
     fetch(`http://localhost:3000/api/weather?city=${encodeURIComponent(city)}`)
         .then(response => {
             if (!response.ok) {
@@ -124,14 +136,32 @@ function loadHistory(city) {
         .catch(err => console.error("Erreur historique :", err));
 }
 
-// fonction pour charger la prédiction de température pour les heures à venir
-function loadPrediction() {
+// Variables globales pour le graphique
+let chartInstance = null;
+let chartCity = null;
 
-    const city = document.getElementById("cityName").textContent;
-    const hours = parseInt(document.getElementById("predictionHours").value, 10);
-
+// fonction pour afficher ou cacher le loader de prédiction
+function setPredictionLoading(isLoading) {
     const predictionBlock = document.getElementById("prediction");
     const predictionValue = document.getElementById("predictionValue");
+    const predictionLoadingMessage = document.getElementById("predictionLoadingMessage");
+
+    predictionBlock.classList.remove("hidden");
+
+    if (isLoading) {
+        predictionLoadingMessage.style.display = "flex";
+        predictionValue.style.display = "none";
+        predictionValue.textContent = "";
+    } else {
+        predictionLoadingMessage.style.display = "none";
+        predictionValue.style.display = "block";
+    }
+}
+
+// fonction pour charger la prédiction de température pour les heures à venir
+function loadPrediction() {
+    const city = document.getElementById("cityName").textContent.trim();
+    const hours = parseInt(document.getElementById("predictionHours").value, 10);
 
     if (!city) {
         alert("Veuillez d'abord rechercher une ville.");
@@ -143,8 +173,7 @@ function loadPrediction() {
         return;
     }
 
-    predictionValue.textContent = "Calcul en cours...";
-    predictionBlock.classList.remove("hidden");
+    setPredictionLoading(true);
 
     fetch(`http://localhost:3000/api/prediction?city=${encodeURIComponent(city)}&hours=${hours}`)
         .then(response => {
@@ -154,6 +183,9 @@ function loadPrediction() {
             return response.json();
         })
         .then(data => {
+            setPredictionLoading(false);
+
+            const predictionValue = document.getElementById("predictionValue");
 
             if (!data) {
                 predictionValue.textContent = "Pas de prediction disponible";
@@ -163,26 +195,18 @@ function loadPrediction() {
             predictionValue.textContent =
                 `${data.predictedTemperature.toFixed(1)} °C dans ${data.hours}h`;
 
-            // Afficher le loader du graphique
-            const loadingMessage = document.getElementById("chartLoadingMessage");
-            loadingMessage.classList.remove("hidden"); // 🔥 important
-            loadingMessage.innerHTML = `
-                <span class="loader"></span>
-                <span>Calcul IA en cours...</span>
-            `;
-
-            // Charger le graphique
-            loadForecastChart(city);
+            if (chartInstance === null) {
+                loadForecastChart(city);
+            }
         })
         .catch(error => {
             console.error(error);
-            predictionValue.textContent = error.message;
+            setPredictionLoading(false);
+            document.getElementById("predictionValue").textContent = error.message;
         });
 }
 
 // fonction pour charger le graphique de prévision pour les 6 prochaines heures
-let chartInstance = null;
-
 async function loadForecastChart(city) {
     const section = document.getElementById("forecastChartSection");
     const loadingMessage = document.getElementById("chartLoadingMessage");
